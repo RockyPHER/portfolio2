@@ -1,7 +1,7 @@
 function Player() {
   return (
     <div>
-      <div>Player</div>
+      <div></div>
     </div>
   );
 }

@@ -1,12 +1,16 @@
 interface CardProps {
   name: string;
+  onClick?: () => void;
 }
 
-function Card({ name }: CardProps) {
+function Card({ name, onClick }: CardProps) {
   return (
-    <div className="w-full p-3 bg-amber-200 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer">
+    <button
+      onClick={onClick}
+      className="w-full h-full p-3 bg-amber-200 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+    >
       <div>{name}</div>
-    </div>
+    </button>
   );
 }
 

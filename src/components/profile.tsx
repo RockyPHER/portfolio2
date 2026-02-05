@@ -7,6 +7,7 @@ function Profile() {
       <div className="w-full p-4 flex flex-col justify-center">
         <p className="text-2xl font-bold">Name</p>
         <p className="text">Subtitle</p>
+        <div></div>
       </div>
     </div>
   );
