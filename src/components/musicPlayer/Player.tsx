@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { IoPause, IoPlay, IoPlayBack, IoPlayForward } from "react-icons/io5";
+import { MdVolumeUp } from "react-icons/md";
 
 function Player() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -77,28 +78,32 @@ function Player() {
   };
 
   return (
-    <div className="w-72">
-      <audio ref={audioRef} src="/src/assets/tokyo.mp4" preload="metadata" />
+    <div className="w-[min(40vw,600px)] flex gap-2 justify-between items-center">
+      <button className="fixed top-10 left-10">
+        <MdVolumeUp className="text-4xl" />
+      </button>
+      <div className="w-32 h-32 shrink-0 border">IMG</div>
+      <div className="flex-1 flex items-center gap-2 justify-center">
+        <span className="mt-3.5 font-mono text-gray-500">{displayTime}</span>
+        <audio ref={audioRef} src="/src/assets/tokyo.mp4" preload="metadata" />
 
-      <div
-        className="w-full bg-gray-300 rounded-full h-2 mt-4 cursor-pointer overflow-hidden"
-        onClick={handleSeek}
-      >
-        <motion.div
-          className="bg-blue-500 h-2 rounded-full"
-          style={{
-            scaleX: progress,
-            transformOrigin: "left",
-          }}
-        />
+        <div
+          className="w-full bg-gray-300 rounded-full h-2 mt-4 cursor-pointer overflow-hidden"
+          onClick={handleSeek}
+        >
+          <motion.div
+            className="bg-blue-500 h-2 rounded-full"
+            style={{
+              scaleX: progress,
+              transformOrigin: "left",
+            }}
+          />
+        </div>
+        <span className="mt-3.5 font-mono text-gray-500">
+          {formatTime(duration)}
+        </span>
       </div>
-
-      <div className="flex justify-between text-[10px] text-gray-500 mt-1 font-mono">
-        <span>{displayTime}</span>
-        <span>{formatTime(duration)}</span>
-      </div>
-
-      <div className="flex gap-3 items-center justify-center mt-3">
+      <div className="flex gap-3 items-center justify-center">
         <button>
           <IoPlayBack className="text-3xl" />
         </button>
