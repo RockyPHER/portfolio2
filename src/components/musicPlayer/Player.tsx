@@ -9,6 +9,7 @@ function formatTime(time: number) {
   const seconds = Math.floor(time % 60);
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
+
 export function clamp(v: number, min = 0, max = 1) {
   return Math.min(Math.max(v, min), max);
 }
@@ -20,8 +21,15 @@ export default function Player() {
   const [duration, setDuration] = useState(0);
   const [displayTime, setDisplayTime] = useState("0:00");
 
+  const [hoverZone, setHoverZone] = useState(false);
+  const [hoverPlayer, setHoverPlayer] = useState(false);
+
+  const [isHovering, setIsHovering] = useState(false);
+
   const progress = useMotionValue(0);
   const currentTime = useMotionValue(0);
+
+  const isOpen = hoverZone || hoverPlayer;
 
   /* ===== Audio Sync ===== */
   useEffect(() => {
@@ -90,64 +98,106 @@ export default function Player() {
   };
 
   return (
-    <div className="flex w-[min(42vw,640px)] items-center justify-center gap-5">
-      <Volume audioRef={audioRef} />
+    <>
+      {/* ===== HOVER DETECTION ZONE (bottom trigger) ===== */}
+      <div
+        className="fixed bottom-0 left-0 w-full h-20 z-40"
+        onMouseEnter={() => setHoverZone(true)}
+        onMouseLeave={() => setHoverZone(false)}
+      />
 
-      {/* COVER */}
-      <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border flex items-center justify-center text-sm text-neutral-400">
-        IMG
-      </div>
-
-      {/* TIMELINE */}
-      <div className="flex flex-1 items-center gap-3">
-        <span className="font-mono text-sm text-gray-400 min-w-10.5 text-right">
-          {displayTime}
-        </span>
-
-        <audio ref={audioRef} src="/src/assets/tokyo.mp4" preload="metadata" />
-
+      {/* ===== PLAYER ===== */}
+      <motion.div
+        initial={false}
+        animate={{ y: isOpen ? 0 : 150 }}
+        transition={{ type: "spring", stiffness: 260, damping: 25 }}
+        onMouseEnter={() => setHoverPlayer(true)}
+        onMouseLeave={() => setHoverPlayer(false)}
+        className="
+          fixed bottom-6 left-1/2 -translate-x-1/2 z-50
+          w-[min(92vw,820px)]
+        "
+      >
+        <div className="fixed -bottom-20 left-0 w-full h-24 z-40" />
         <div
-          className="h-2 w-full cursor-pointer overflow-hidden rounded-full bg-neutral-700"
-          onClick={handleSeek}
+          className="
+            flex items-center gap-5 px-5 py-4
+            rounded-2xl
+            bg-white/10 backdrop-blur-xl
+            border border-white/20
+            shadow-2xl shadow-black/40
+          "
         >
+          {/* Volume */}
+          <Volume audioRef={audioRef} />
+
+          {/* COVER */}
           <motion.div
-            className="h-full bg-blue-500"
-            style={{ scaleX: progress, transformOrigin: "left" }}
-          />
+            animate={{ opacity: hoverPlayer ? 1 : 0 }}
+            className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-white/20"
+          >
+            <img
+              src="https://cdn-images.dzcdn.net/images/cover/64c49352f1cf69ee02bd88aa17a9f741/0x1900-000000-80-0-0.jpg"
+              className="h-full w-full object-cover"
+            />
+          </motion.div>
+
+          {/* TIMELINE */}
+          <div className="flex flex-1 items-center gap-3 min-w-0">
+            <span className="font-mono text-xs text-white/60 min-w-10 text-right">
+              {displayTime}
+            </span>
+
+            <audio
+              ref={audioRef}
+              src="/src/assets/tokyo.mp4"
+              preload="metadata"
+            />
+
+            <div
+              className="h-2 w-full cursor-pointer overflow-hidden rounded-full bg-white/20"
+              onClick={handleSeek}
+            >
+              <motion.div
+                className="h-full bg-blue-500"
+                style={{ scaleX: progress, transformOrigin: "left" }}
+              />
+            </div>
+
+            <span className="font-mono text-xs text-white/60 min-w-10">
+              {formatTime(duration)}
+            </span>
+          </div>
+
+          {/* CONTROLS */}
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={() => skip(-5)}
+              className="cursor-pointer hover:scale-110 transition"
+            >
+              <IoPlayBack className="text-2xl text-white/80" />
+            </button>
+
+            <button
+              onClick={togglePlay}
+              className="cursor-pointer hover:scale-110 transition"
+            >
+              {isPaused ? (
+                <IoPlay className="text-3xl text-white" />
+              ) : (
+                <IoPause className="text-3xl text-white" />
+              )}
+            </button>
+
+            <button
+              onClick={() => skip(5)}
+              className="cursor-pointer hover:scale-110 transition"
+            >
+              <IoPlayForward className="text-2xl text-white/80" />
+            </button>
+          </div>
         </div>
-
-        <span className="font-mono text-sm text-gray-400 min-w-10.5">
-          {formatTime(duration)}
-        </span>
-      </div>
-
-      {/* CONTROLS */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => skip(-5)}
-          className="cursor-pointer hover:scale-110 transition"
-        >
-          <IoPlayBack className="text-3xl" />
-        </button>
-
-        <button
-          onClick={togglePlay}
-          className="cursor-pointer hover:scale-110 transition"
-        >
-          {isPaused ? (
-            <IoPlay className="text-4xl" />
-          ) : (
-            <IoPause className="text-4xl" />
-          )}
-        </button>
-
-        <button
-          onClick={() => skip(5)}
-          className="cursor-pointer hover:scale-110 transition"
-        >
-          <IoPlayForward className="text-3xl" />
-        </button>
-      </div>
-    </div>
+      </motion.div>
+    </>
   );
 }

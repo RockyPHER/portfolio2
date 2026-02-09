@@ -7,9 +7,9 @@ function Card({ name, onClick }: CardProps) {
   return (
     <button
       onClick={onClick}
-      className="w-full h-24 p-3 bg-amber-200 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+      className="w-full h-24 p-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer"
     >
-      <div>{name}</div>
+      <div className="text-white">{name}</div>
     </button>
   );
 }

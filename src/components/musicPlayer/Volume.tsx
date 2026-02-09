@@ -106,12 +106,12 @@ export default function Volume({ audioRef }: VolumeProps) {
       {/* DROPDOWN */}
       <div
         className={`
-          absolute left-full top-1/2 -translate-y-1/2 pl-2
+          absolute right-full top-1/2 -translate-y-1/2 pl-2
           transition-opacity duration-150
           ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
         `}
       >
-        <div className="w-36 h-10 bg-neutral-800 border border-neutral-700 rounded-xl shadow-xl flex items-center px-3">
+        <div className="w-36 h-10 bg-neutral-400/70 border border-neutral-700/20 rounded-xl shadow-xl flex items-center px-3">
           <motion.div
             ref={trackRef}
             drag="x"
@@ -120,11 +120,11 @@ export default function Volume({ audioRef }: VolumeProps) {
             dragMomentum={false}
             onDrag={(_, info) => setFromClientX(info.point.x)}
             onPointerDown={(e) => setFromClientX(e.clientX)}
-            className="relative h-2 w-full bg-neutral-600 rounded-full cursor-ew-resize touch-none"
+            className="relative h-2 w-full bg-white/20 rounded-full cursor-ew-resize touch-none"
           >
             {/* FILL */}
             <motion.div
-              className="absolute left-0 top-0 h-full w-full bg-blue-500 rounded-full"
+              className="absolute left-0 top-0 h-full w-full bg-neutral-800 rounded-full"
               style={{
                 scaleX: volume,
                 transformOrigin: "left",
@@ -133,7 +133,7 @@ export default function Volume({ audioRef }: VolumeProps) {
 
             {/* THUMB */}
             <motion.div
-              className="absolute top-1/2 w-3 h-3 bg-blue-400 rounded-full shadow-md -translate-y-1/2"
+              className="absolute top-1/2 w-3 h-3 bg-neutral-900 rounded-full shadow-md -translate-y-1/2"
               style={{
                 left: volumePercent,
                 x: "-50%",
