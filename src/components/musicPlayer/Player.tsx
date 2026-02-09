@@ -1,114 +1,139 @@
 import { motion, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { IoPause, IoPlay, IoPlayBack, IoPlayForward } from "react-icons/io5";
-import { MdVolumeUp } from "react-icons/md";
+import Volume from "./Volume";
 
-function Player() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+function formatTime(time: number) {
+  if (!Number.isFinite(time)) return "0:00";
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+export function clamp(v: number, min = 0, max = 1) {
+  return Math.min(Math.max(v, min), max);
+}
+
+export default function Player() {
+  const audioRef = useRef<HTMLAudioElement>(null!);
 
   const [isPaused, setIsPaused] = useState(true);
   const [duration, setDuration] = useState(0);
   const [displayTime, setDisplayTime] = useState("0:00");
 
-  const progress = useMotionValue(0); // 0 → 1
+  const progress = useMotionValue(0);
   const currentTime = useMotionValue(0);
 
+  /* ===== Audio Sync ===== */
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const update = () => {
+    const onTimeUpdate = () => {
       currentTime.set(audio.currentTime);
-
-      if (!isNaN(audio.duration)) {
-        progress.set(audio.currentTime / audio.duration);
-      }
+      progress.set(audio.duration ? audio.currentTime / audio.duration : 0);
     };
 
-    const onLoaded = () => {
-      setDuration(audio.duration);
-    };
+    const onLoadedMetadata = () => setDuration(audio.duration || 0);
+    const onPlay = () => setIsPaused(false);
+    const onPause = () => setIsPaused(true);
+    const onEnded = () => setIsPaused(true);
 
-    audio.addEventListener("timeupdate", update);
-    audio.addEventListener("loadedmetadata", onLoaded);
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onEnded);
 
     return () => {
-      audio.removeEventListener("timeupdate", update);
-      audio.removeEventListener("loadedmetadata", onLoaded);
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onEnded);
     };
-  }, []);
+  }, [currentTime, progress]);
 
-  function formatTime(time: number) {
-    if (isNaN(time)) return "0:00";
-
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  }
-
-  useMotionValueEvent(currentTime, "change", (value) => {
-    setDisplayTime(formatTime(value));
+  useMotionValueEvent(currentTime, "change", (v) => {
+    setDisplayTime(formatTime(v));
   });
 
+  /* ===== Controls ===== */
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setIsPaused(false);
-    } else {
-      audio.pause();
-      setIsPaused(true);
-    }
+    audio.paused ? audio.play() : audio.pause();
   };
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current;
     if (!audio || !duration) return;
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
+    const { left, width } = e.currentTarget.getBoundingClientRect();
+    const percent = clamp((e.clientX - left) / width);
 
     audio.currentTime = percent * duration;
-
-    progress.set(percent);
     currentTime.set(audio.currentTime);
+    progress.set(percent);
+  };
+
+  const skip = (seconds: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const next = clamp(
+      audio.currentTime + seconds,
+      0,
+      duration || audio.duration || 0,
+    );
+
+    audio.currentTime = next;
   };
 
   return (
-    <div className="w-[min(40vw,600px)] flex gap-2 justify-between items-center">
-      <button className="fixed top-10 left-10">
-        <MdVolumeUp className="text-4xl" />
-      </button>
-      <div className="w-32 h-32 shrink-0 border">IMG</div>
-      <div className="flex-1 flex items-center gap-2 justify-center">
-        <span className="mt-3.5 font-mono text-gray-500">{displayTime}</span>
+    <div className="flex w-[min(42vw,640px)] items-center justify-center gap-5">
+      <Volume audioRef={audioRef} />
+
+      {/* COVER */}
+      <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border flex items-center justify-center text-sm text-neutral-400">
+        IMG
+      </div>
+
+      {/* TIMELINE */}
+      <div className="flex flex-1 items-center gap-3">
+        <span className="font-mono text-sm text-gray-400 min-w-10.5 text-right">
+          {displayTime}
+        </span>
+
         <audio ref={audioRef} src="/src/assets/tokyo.mp4" preload="metadata" />
 
         <div
-          className="w-full bg-gray-300 rounded-full h-2 mt-4 cursor-pointer overflow-hidden"
+          className="h-2 w-full cursor-pointer overflow-hidden rounded-full bg-neutral-700"
           onClick={handleSeek}
         >
           <motion.div
-            className="bg-blue-500 h-2 rounded-full"
-            style={{
-              scaleX: progress,
-              transformOrigin: "left",
-            }}
+            className="h-full bg-blue-500"
+            style={{ scaleX: progress, transformOrigin: "left" }}
           />
         </div>
-        <span className="mt-3.5 font-mono text-gray-500">
+
+        <span className="font-mono text-sm text-gray-400 min-w-10.5">
           {formatTime(duration)}
         </span>
       </div>
-      <div className="flex gap-3 items-center justify-center">
-        <button>
+
+      {/* CONTROLS */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => skip(-5)}
+          className="cursor-pointer hover:scale-110 transition"
+        >
           <IoPlayBack className="text-3xl" />
         </button>
 
-        <button onClick={togglePlay}>
+        <button
+          onClick={togglePlay}
+          className="cursor-pointer hover:scale-110 transition"
+        >
           {isPaused ? (
             <IoPlay className="text-4xl" />
           ) : (
@@ -116,12 +141,13 @@ function Player() {
           )}
         </button>
 
-        <button>
+        <button
+          onClick={() => skip(5)}
+          className="cursor-pointer hover:scale-110 transition"
+        >
           <IoPlayForward className="text-3xl" />
         </button>
       </div>
     </div>
   );
 }
-
-export default Player;

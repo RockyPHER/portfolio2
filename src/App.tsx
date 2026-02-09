@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Projects from "./components/profile/Projects";
 import Player from "./components/musicPlayer/Player";
-import Songs from "./components/profile/Songs";
-import Edits from "./components/profile/Edits";
 import Main from "./components/profile/Main";
 
 function App() {
@@ -46,7 +44,7 @@ function App() {
           muted
           playsInline
         />
-        <div className="relative w-[min(40vw,600px)] aspect-3/5 flex flex-col justify-between items-center bg-gray-300 rounded-xl">
+        <div className="relative w-[70vw] aspect-video flex flex-col justify-between items-center bg-gray-300 rounded-xl">
           {stance.main && (
             <Main
               onClickMusic={handleOnClickMusic}
@@ -55,8 +53,8 @@ function App() {
             />
           )}
           {stance.projects && <Projects onClick={handleOnClickBack} />}
-          {stance.videos && <Songs onClick={handleOnClickBack} />}
-          {stance.music && <Edits onClick={handleOnClickBack} />}
+          {/* {stance.videos && <Songs onClick={handleOnClickBack} />}
+          {stance.music && <Edits onClick={handleOnClickBack} />} */}
         </div>
         <Player />
       </div>

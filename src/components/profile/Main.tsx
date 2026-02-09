@@ -1,4 +1,6 @@
 import { BsDiscord, BsGithub, BsSpotify, BsTwitterX } from "react-icons/bs";
+import type { ComponentType } from "react";
+
 import Card from "../Card";
 import Divider from "../Divider";
 import Profile from "../Profile";
@@ -10,33 +12,54 @@ interface MainProps {
   onClickMusic: () => void;
 }
 
-function Main({ onClickProjects, onClickVideos, onClickMusic }: MainProps) {
+interface SocialLink {
+  href: string;
+  label: string;
+  Icon: ComponentType<{ className?: string }>;
+}
+
+const SOCIAL_LINKS: SocialLink[] = [
+  { href: "https://discord.com", label: "Discord", Icon: BsDiscord },
+  { href: "https://twitter.com", label: "Twitter", Icon: BsTwitterX },
+  { href: "https://github.com/RockyPHER", label: "GitHub", Icon: BsGithub },
+  {
+    href: "https://open.spotify.com/user/tzdv26y90c5vbfbzknuioavqy?si=9380300972b34a50",
+    label: "Spotify",
+    Icon: BsSpotify,
+  },
+];
+
+export default function Main({
+  onClickProjects,
+  onClickVideos,
+  onClickMusic,
+}: MainProps) {
+  const cards = [
+    { name: "Projetos", onClick: onClickProjects },
+    { name: "Vídeos", onClick: onClickVideos },
+    { name: "Músicas", onClick: onClickMusic },
+  ] as const;
+
   return (
-    <div className="w-full h-full gap-4 p-6 flex flex-col">
+    <div className="flex h-full w-full flex-col gap-4 p-4 sm:p-6">
       <Profile />
       <Divider />
-      <div className="w-full h-full gap-2 flex flex-col">
-        <Card name="Projetos" onClick={onClickProjects} />
-        <Card name="Vídeos" onClick={onClickVideos} />
-        <Card name="Músicas" onClick={onClickMusic} />
+
+      <div className="flex flex-1 flex-col gap-2">
+        {cards.map(({ name, onClick }) => (
+          <Card key={name} name={name} onClick={onClick} />
+        ))}
       </div>
+
       <Divider />
-      <div className="w-full gap-2 flex justify-center items-center">
-        <Link>
-          <BsDiscord className="text-4xl" />
-        </Link>
-        <Link>
-          <BsTwitterX className="text-4xl" />
-        </Link>
-        <Link href="https://github.com/RockyPHER">
-          <BsGithub className="text-4xl" />
-        </Link>
-        <Link href="https://open.spotify.com/user/tzdv26y90c5vbfbzknuioavqy?si=9380300972b34a50">
-          <BsSpotify className="text-4xl" />
-        </Link>
-      </div>
+
+      <nav className="flex justify-center gap-4 sm:gap-6">
+        {SOCIAL_LINKS.map(({ href, label, Icon }) => (
+          <Link key={label} href={href} aria-label={label}>
+            <Icon className="text-2xl transition-transform hover:scale-110 sm:text-3xl md:text-4xl" />
+          </Link>
+        ))}
+      </nav>
     </div>
   );
 }
-
-export default Main;

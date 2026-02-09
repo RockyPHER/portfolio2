@@ -3,22 +3,26 @@ import Location from "./Location";
 
 function Profile() {
   return (
-    <div className="w-full h-auto pt-10 px-5 flex flex-col items-center">
-      <div className="h-full w-min">
-        <div className="bg-gray-200 w-48 h-48 rounded-full">
-          <img
-            src="https://i.pinimg.com/1200x/42/c0/b3/42c0b3324041da597ee3c4aa3708c5ca.jpg"
-            alt="Profile"
-            className="w-full h-full rounded-full object-cover"
-          />
-        </div>
+    <div className="flex w-full flex-col items-center gap-3 px-4 pt-6 text-center sm:flex-row sm:justify-center sm:gap-6 sm:pt-10 sm:text-left">
+      {/* Avatar */}
+      <div className="h-24 w-24 shrink-0 overflow-hidden rounded-full bg-gray-200 sm:h-32 sm:w-32">
+        <img
+          src="https://i.pinimg.com/1200x/42/c0/b3/42c0b3324041da597ee3c4aa3708c5ca.jpg"
+          alt="Profile"
+          className="h-full w-full object-cover"
+        />
       </div>
-      <div className="w-full p-4 flex flex-col justify-center">
-        <p className="text-2xl font-bold">Maçaneta</p>
-        <p className="text">Fullstack Developer</p>
-        <div className="flex justify-end items-center mt-2">
+
+      {/* Info */}
+      <div className="flex flex-col items-center gap-1 sm:items-start">
+        <p className="text-xl font-bold sm:text-2xl">Maçaneta</p>
+        <p className="text-sm text-gray-700 sm:text-base">
+          Fullstack Developer
+        </p>
+
+        <div className="mt-1 flex items-center gap-2 text-sm">
           <Views />
-          <p className="text-gray-500 mx-2">|</p>
+          <span className="text-gray-500">|</span>
           <Location />
         </div>
       </div>
