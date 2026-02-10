@@ -15,7 +15,7 @@ export function clamp(v: number, min = 0, max = 1) {
 }
 
 export default function Player() {
-  const audioRef = useRef<HTMLAudioElement>(null!);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const [isPaused, setIsPaused] = useState(true);
   const [duration, setDuration] = useState(0);
@@ -23,8 +23,6 @@ export default function Player() {
 
   const [hoverZone, setHoverZone] = useState(false);
   const [hoverPlayer, setHoverPlayer] = useState(false);
-
-  const [isHovering, setIsHovering] = useState(false);
 
   const progress = useMotionValue(0);
   const currentTime = useMotionValue(0);
@@ -88,52 +86,38 @@ export default function Player() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const next = clamp(
+    audio.currentTime = clamp(
       audio.currentTime + seconds,
       0,
       duration || audio.duration || 0,
     );
-
-    audio.currentTime = next;
   };
 
   return (
     <>
-      {/* ===== HOVER DETECTION ZONE (bottom trigger) ===== */}
+      {/* Hover detection zone at bottom of screen */}
       <div
-        className="fixed bottom-0 left-0 w-full h-20 z-40"
+        className="fixed -bottom-20 -translate-x-1/2 w-screen h-32 z-40 cursor-pointer"
         onMouseEnter={() => setHoverZone(true)}
         onMouseLeave={() => setHoverZone(false)}
       />
 
-      {/* ===== PLAYER ===== */}
+      {/* Player */}
       <motion.div
         initial={false}
         animate={{ y: isOpen ? 0 : 150 }}
         transition={{ type: "spring", stiffness: 260, damping: 25 }}
         onMouseEnter={() => setHoverPlayer(true)}
         onMouseLeave={() => setHoverPlayer(false)}
-        className="
-          fixed bottom-6 left-1/2 -translate-x-1/2 z-50
-          w-[min(92vw,820px)]
-        "
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[min(92vw,820px)] cursor-pointer"
       >
-        <div className="fixed -bottom-20 left-0 w-full h-24 z-40" />
-        <div
-          className="
-            flex items-center gap-5 px-5 py-4
-            rounded-2xl
-            bg-white/10 backdrop-blur-xl
-            border border-white/20
-            shadow-2xl shadow-black/40
-          "
-        >
+        <div className="flex items-center gap-5 px-5 py-4 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/40">
           {/* Volume */}
           <Volume audioRef={audioRef} />
 
-          {/* COVER */}
+          {/* Cover Art */}
           <motion.div
-            animate={{ opacity: hoverPlayer ? 1 : 0 }}
+            animate={{ opacity: hoverZone || hoverPlayer ? 1 : 0 }}
             className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-white/20"
           >
             <img
@@ -142,7 +126,7 @@ export default function Player() {
             />
           </motion.div>
 
-          {/* TIMELINE */}
+          {/* Timeline */}
           <div className="flex flex-1 items-center gap-3 min-w-0">
             <span className="font-mono text-xs text-white/60 min-w-10 text-right">
               {displayTime}
@@ -169,7 +153,7 @@ export default function Player() {
             </span>
           </div>
 
-          {/* CONTROLS */}
+          {/* Controls */}
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => skip(-5)}

@@ -1,12 +1,12 @@
 import { IoMdEye } from "react-icons/io";
 
-function Views() {
+export default function Views({ views }: { views: number }) {
   return (
-    <div className="flex gap-2 items-center">
-      <IoMdEye className="text-2xl animate-pulse" />
-      <p className="font-mono text-gray-500">0</p>
+    <div className="flex items-center gap-2">
+      <IoMdEye className="text-xl sm:text-2xl text-white/80 animate-pulse" />
+      <p className="font-mono text-sm sm:text-base text-white/70">
+        {views ? views : 0}
+      </p>
     </div>
   );
 }
-
-export default Views;

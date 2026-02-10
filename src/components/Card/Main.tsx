@@ -1,15 +1,16 @@
 import { BsDiscord, BsGithub, BsSpotify, BsTwitterX } from "react-icons/bs";
-import { useState, type ComponentType } from "react";
+import { type ComponentType } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import Divider from "../Divider";
-import Profile from "../Profile";
+import Profile from "./pages/Profile";
 import Link from "../Link";
 
 interface MainProps {
   onClickProjects: () => void;
   onClickVideos: () => void;
   onClickDesign: () => void;
+  views: number;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -27,7 +28,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   { href: "https://open.spotify.com", label: "Spotify", Icon: BsSpotify },
 ];
 
-const CARDS = [
+const OPTIONS = [
   {
     name: "Projetos",
     description: "Apps, bots e experimentos",
@@ -54,10 +55,11 @@ export default function Main({
   onClickProjects,
   onClickVideos,
   onClickDesign,
+  views,
   isOpen,
   setIsOpen,
 }: MainProps) {
-  const handleCardClick = (index: number) => {
+  const handleoptionClick = (index: number) => {
     const callbacks = [onClickProjects, onClickVideos, onClickDesign];
     callbacks[index]?.();
   };
@@ -66,25 +68,25 @@ export default function Main({
     <div className="flex h-full w-full flex-col justify-between gap-6 px-4 sm:px-6">
       {/* PROFILE */}
       <div className="shrink-0">
-        <Profile />
+        <Profile views={views} />
       </div>
 
       {/* EXPANDABLE SECTION */}
       <div className="flex flex-col items-center w-full">
         {/* Divider com botão */}
         <div className="relative w-full flex items-center justify-center">
-          <Divider />
-
           {!isOpen && (
             <button
               onClick={() => setIsOpen(true)}
-              className="absolute flex items-center justify-center rounded-full border border-white/20 bg-white/10 p-4 backdrop-blur transition hover:scale-110 hover:bg-white/20 cursor-pointer"
+              className="absolute w-full h-full p-16 flex items-center justify-center rounded-2xl border-2 border-dashed border-white/20 transition hover:bg-white/20 cursor-pointer"
               aria-label="Expandir menu"
-            />
+            >
+              <span className="text-sm font-medium">Explore</span>
+            </button>
           )}
         </div>
 
-        {/* CARDS ANIMADOS */}
+        {/* OPTIONS ANIMADOS */}
         <AnimatePresence initial={false}>
           {isOpen && (
             <motion.div
@@ -96,21 +98,21 @@ export default function Main({
             >
               <div className="flex justify-center py-4">
                 <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-2">
-                  {CARDS.map((card, index) => (
+                  {OPTIONS.map((option, index) => (
                     <button
-                      key={card.name}
-                      onClick={() => handleCardClick(index)}
+                      key={option.name}
+                      onClick={() => handleoptionClick(index)}
                       className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-white/40 cursor-pointer"
                     >
                       {/* Gradient Hover */}
                       <div
-                        className={`absolute inset-0 bg-linear-to-br ${card.gradient} opacity-0 transition-opacity group-hover:opacity-100`}
+                        className={`absolute inset-0 bg-linear-to-br ${option.gradient} opacity-0 transition-opacity group-hover:opacity-100`}
                       />
 
                       <div className="relative z-10">
-                        <h2 className="text-xl font-semibold">{card.name}</h2>
+                        <h2 className="text-xl font-semibold">{option.name}</h2>
                         <p className="mt-2 text-sm text-white/70">
-                          {card.description}
+                          {option.description}
                         </p>
                       </div>
                     </button>
@@ -119,7 +121,16 @@ export default function Main({
               </div>
 
               {/* Divider inferior opcional */}
-              <Divider />
+
+              {isOpen && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Divider />
+                </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

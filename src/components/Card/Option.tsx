@@ -1,9 +1,9 @@
-interface CardProps {
+interface OptionProps {
   name: string;
   onClick?: () => void;
 }
 
-function Card({ name, onClick }: CardProps) {
+function Option({ name, onClick }: OptionProps) {
   return (
     <button
       onClick={onClick}
@@ -14,4 +14,4 @@ function Card({ name, onClick }: CardProps) {
   );
 }
 
-export default Card;
+export default Option;
