@@ -165,7 +165,7 @@ function App() {
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover pointer-events-none filter brightness-50 z-0"
-        src="/src/assets/background.mp4"
+        src="../public/background.mp4"
         loop
         muted
         autoPlay
