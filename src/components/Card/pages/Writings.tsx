@@ -15,12 +15,16 @@ function Writings({ onClick }: WritingsProps) {
           <MdArrowBack className="text-lg sm:text-2xl" />
         </button>
 
-        <h1 className="text-base sm:text-lg md:text-xl font-medium\">Writings</h1>
+        <h1 className="text-base sm:text-lg md:text-xl font-medium\">
+          Writings
+        </h1>
       </div>
 
       {/* Content */}
       <div className="absolute inset-0 overflow-y-auto px-2 sm:px-4 md:px-6 pb-6 sm:pb-8 pt-16 sm:pt-20 flex items-center justify-center\">
-        <p className=\"text-sm sm:text-base text-white/60 text-center\">Conteúdo em breve...</p>
+        <p className="text-sm sm:text-base text-white/60 text-center\">
+          Conteúdo em breve...
+        </p>
       </div>
     </div>
   );
