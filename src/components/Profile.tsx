@@ -1,5 +1,5 @@
-import Views from "../../Views";
-import Location from "../../Location";
+import Views from "./Views";
+import Location from "./Location";
 
 interface Props {
   views: number;

@@ -1,8 +1,8 @@
-import Main from "./components/Card/Main";
-import Edits from "./components/Card/pages/Edits";
-import Design from "./components/Card/pages/Design";
-import Projects from "./components/Card/pages/Projects";
-import Player from "./components/musicPlayer/Player";
+import Main from "./components/Main";
+import Edits from "./components/Edits";
+import Design from "./components/Design";
+import Projects from "./components/Projects";
+import Player from "./components/Player";
 import Backdrop from "./components/Backdrop";
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";

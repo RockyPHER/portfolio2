@@ -2,9 +2,9 @@ import { BsDiscord, BsGithub, BsSpotify, BsTwitterX } from "react-icons/bs";
 import { type ComponentType } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import Divider from "../Divider";
-import Profile from "./pages/Profile";
-import Link from "../Link";
+import Profile from "./Profile";
+import Link from "./Link";
+import Divider from "./Divider";
 
 interface MainProps {
   onClickProjects: () => void;
