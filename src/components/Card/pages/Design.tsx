@@ -28,27 +28,27 @@ export default function Design({ onClick }: DesignProps) {
   return (
     <div className="relative h-full w-full overflow-hidden">
       {/* Header */}
-      <div className="absolute left-4 top-4 z-20 flex items-center gap-3">
+      <div className="absolute left-2 sm:left-4 top-3 sm:top-4 z-20 flex items-center gap-2 sm:gap-3">
         <button
           onClick={onClick}
-          className="cursor-pointer rounded-full p-2 transition hover:scale-105 hover:bg-white/20 active:scale-95"
+          className="cursor-pointer rounded-full p-1.5 sm:p-2 transition hover:scale-105 hover:bg-white/20 active:scale-95"
         >
-          <MdArrowBack className="text-2xl" />
+          <MdArrowBack className="text-lg sm:text-2xl" />
         </button>
 
-        <h1 className="text-xl font-medium">Design</h1>
+        <h1 className="text-base sm:text-lg md:text-xl font-medium">Design</h1>
       </div>
 
       {/* Scroll Content */}
-      <div className="absolute inset-0 overflow-y-auto px-4 pb-8 pt-20 sm:px-6">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2">
+      <div className="absolute inset-0 overflow-y-auto px-2 sm:px-4 md:px-6 pb-6 sm:pb-8 pt-16 sm:pt-20">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-2 sm:gap-3 md:gap-5 sm:grid-cols-2">
           {DESIGNS.map((design) => (
             <div
               key={design.title}
-              className="group relative overflow-hidden rounded-xl border border-white/20 bg-white/10 backdrop-blur transition-all hover:-translate-y-1 hover:border-blue-400/40"
+              className="group relative overflow-hidden rounded-lg sm:rounded-xl border border-white/20 bg-white/10 backdrop-blur transition-all hover:-translate-y-1 hover:border-blue-400/40"
             >
               {/* Preview Image */}
-              <div className="h-40 w-full overflow-hidden">
+              <div className="h-32 sm:h-40 md:h-48 w-full overflow-hidden">
                 <img
                   src={design.preview}
                   alt={design.title}
@@ -57,29 +57,31 @@ export default function Design({ onClick }: DesignProps) {
               </div>
 
               {/* Content */}
-              <div className="p-4">
-                <div className="flex items-start justify-between">
-                  <h2 className="text-lg font-medium">{design.title}</h2>
+              <div className="p-2 sm:p-3 md:p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <h2 className="text-base sm:text-lg font-medium">
+                    {design.title}
+                  </h2>
 
                   <a
                     href={design.link}
                     target="_blank"
-                    className="opacity-0 transition group-hover:opacity-100 hover:text-blue-400"
+                    className="opacity-0 transition group-hover:opacity-100 hover:text-blue-400 text-sm sm:text-base shrink-0"
                   >
                     <BsBoxArrowUpRight />
                   </a>
                 </div>
 
-                <p className="mt-2 text-sm text-white/70">
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-white/70">
                   {design.description}
                 </p>
 
                 {/* Tools */}
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="mt-2 sm:mt-4 flex flex-wrap gap-1 sm:gap-2">
                   {design.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="rounded-md bg-white/10 px-2 py-1 text-xs text-white/80"
+                      className="rounded-md bg-white/10 px-2 py-0.5 sm:py-1 text-xs text-white/80"
                     >
                       {tool}
                     </span>

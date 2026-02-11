@@ -32,22 +32,22 @@ const OPTIONS = [
   {
     name: "Projetos",
     description: "Apps, bots e experimentos",
-    gradient: "from-blue-500/20 to-cyan-500/20",
+    gradient: "from-red-500/20 to-black-500/20",
   },
   {
     name: "Edits",
     description: "Motion + video edits",
-    gradient: "from-purple-500/20 to-pink-500/20",
+    gradient: "from-red-500/20 to-pink-500/20",
   },
   {
     name: "Design",
     description: "UI, concepts e assets",
-    gradient: "from-emerald-500/20 to-teal-500/20",
+    gradient: "from-red-500/20 to-teal-500/20",
   },
   {
     name: "Writing",
     description: "Posts, articles e essays",
-    gradient: "from-yellow-500/20 to-orange-500/20",
+    gradient: "from-red-500/20 to-orange-500/20",
   },
 ] as const;
 
@@ -65,7 +65,7 @@ export default function Main({
   };
 
   return (
-    <div className="flex h-full w-full flex-col justify-between gap-6 px-4 sm:px-6">
+    <div className="flex h-full w-full flex-col justify-between gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-1.5 sm:px-3 md:px-4 lg:px-6 overflow-y-auto pr-1.5 sm:pr-2.5 md:pr-3 lg:pr-3">
       {/* PROFILE */}
       <div className="shrink-0">
         <Profile views={views} />
@@ -78,10 +78,12 @@ export default function Main({
           {!isOpen && (
             <button
               onClick={() => setIsOpen(true)}
-              className="absolute w-full h-full p-16 flex items-center justify-center rounded-2xl border-2 border-dashed border-white/20 transition hover:bg-white/20 cursor-pointer"
+              className="absolute w-full h-full p-4 sm:p-6 md:p-8 lg:p-12 flex items-center justify-center rounded-lg sm:rounded-xl md:rounded-2xl border-2 border-dashed border-white/20 transition hover:bg-white/20 cursor-pointer"
               aria-label="Expandir menu"
             >
-              <span className="text-sm font-medium">Explore</span>
+              <span className="text-xs sm:text-sm md:text-base font-medium">
+                Explore
+              </span>
             </button>
           )}
         </div>
@@ -96,13 +98,13 @@ export default function Main({
               transition={{ duration: 0.35 }}
               className="overflow-hidden w-full"
             >
-              <div className="flex justify-center py-4">
-                <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+              <div className="flex justify-center py-1 sm:py-2 md:py-3 lg:py-4">
+                <div className="grid w-full max-w-3xl gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 grid-cols-1 sm:grid-cols-2">
                   {OPTIONS.map((option, index) => (
                     <button
                       key={option.name}
                       onClick={() => handleoptionClick(index)}
-                      className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-white/40 cursor-pointer"
+                      className="group relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl border border-white/20 bg-white/10 p-3 sm:p-2 md:p-3 text-left transition-all duration-300 hover:-translate-y-1 hover:border-white/40 cursor-pointer"
                     >
                       {/* Gradient Hover */}
                       <div
@@ -110,8 +112,10 @@ export default function Main({
                       />
 
                       <div className="relative z-10">
-                        <h2 className="text-xl font-semibold">{option.name}</h2>
-                        <p className="mt-2 text-sm text-white/70">
+                        <h2 className="text-base sm:text-lg md:text-xl font-semibold">
+                          {option.name}
+                        </h2>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-white/70">
                           {option.description}
                         </p>
                       </div>
@@ -121,7 +125,6 @@ export default function Main({
               </div>
 
               {/* Divider inferior opcional */}
-
               {isOpen && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -138,10 +141,10 @@ export default function Main({
 
       {/* SOCIAL */}
       <div className="shrink-0">
-        <nav className="flex justify-center gap-5 pb-2">
+        <nav className="flex justify-center gap-3 sm:gap-4 md:gap-5 pb-1 sm:pb-2">
           {SOCIAL_LINKS.map(({ href, label, Icon }) => (
             <Link key={label} href={href} aria-label={label}>
-              <Icon className="text-2xl transition hover:scale-110" />
+              <Icon className="text-lg sm:text-xl md:text-2xl transition hover:scale-110" />
             </Link>
           ))}
         </nav>
