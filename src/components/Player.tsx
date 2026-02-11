@@ -283,7 +283,7 @@ export default function Player({ audioRef, setTremor }: PlayerProps) {
 
             <audio
               ref={audioRef}
-              src="../../public/tokyo.mp4"
+              src="https://files.catbox.moe/9kwswc.mp4"
               preload="metadata"
               crossOrigin="anonymous"
               autoPlay
