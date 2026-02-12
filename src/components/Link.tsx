@@ -5,13 +5,15 @@ interface LinkProps {
 
 function Link({ children, href }: LinkProps) {
   return (
-    <a
-      className="hover:scale-105 transition-transform active:scale-95 cursor-pointer"
-      href={href}
-      target="_blank"
-    >
-      {children}
-    </a>
+    <div className="group relative cursor-pointer flex items-center justify-center p-2.5 sm:p-3 transition-all duration-300  hover:-translate-y-1">
+      <a
+        className="w-full h-full hover:scale-105 transition-transform active:scale-95"
+        href={href}
+        target="_blank"
+      >
+        {children}
+      </a>
+    </div>
   );
 }
 

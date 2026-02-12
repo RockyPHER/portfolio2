@@ -1,5 +1,6 @@
 import { MdArrowBack } from "react-icons/md";
 import { BsGithub, BsBoxArrowUpRight } from "react-icons/bs";
+import { motion, type Variants } from "framer-motion";
 
 interface ProjectsProps {
   onClick: () => void;
@@ -7,90 +8,132 @@ interface ProjectsProps {
 
 const PROJECTS = [
   {
-    title: "Music Player",
-    description: "Custom audio player with smooth motion UI",
-    tech: ["React", "TypeScript", "Framer Motion"],
-    github: "#",
-    live: "#",
+    title: "Waifufu",
+    description: "CRUD app for showcasing waifus with cute UI",
+    tech: ["React", "TypeScript", "ExpressJS", "Prisma"],
+    github: "https://github.com/RockyPHER/waifufu-fullstack",
+    live: "https://waifufu-fullstack.vercel.app/",
+    index: "01",
   },
   {
-    title: "Portfolio",
-    description: "Personal portfolio with glassmorphism",
+    title: "Pomodoro--",
+    description: "Strange pomodoro timer based on tasks instead of time",
     tech: ["React", "Tailwind"],
-    github: "#",
-    live: "#",
+    github: "https://github.com/RockyPHER/pomodoro--",
+    live: "https://pomodoro-mocha-one.vercel.app/",
+    index: "02",
   },
 ];
 
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 export default function Projects({ onClick }: ProjectsProps) {
   return (
-    <div className="relative h-full w-full overflow-hidden">
-      {/* Header */}
-      <div className="absolute left-2 sm:left-4 top-3 sm:top-4 z-20 flex items-center gap-2 sm:gap-3">
+    <div className="relative h-full w-full select-none">
+      {/* Header - Mais nítido e integrado */}
+      <div className="flex items-center gap-4 mb-8">
         <button
           onClick={onClick}
-          className="cursor-pointer rounded-full p-1.5 sm:p-2 transition hover:scale-105 hover:bg-white/20 active:scale-95"
+          className="group cursor-pointer rounded-full bg-white/10 p-2.5 backdrop-blur-md border border-white/20 transition-all hover:bg-white/30 active:scale-90"
         >
-          <MdArrowBack className="text-lg sm:text-2xl" />
+          <MdArrowBack className="text-xl text-white group-hover:scale-110 transition-transform" />
         </button>
-
-        <h1 className="text-base sm:text-lg md:text-xl font-medium">
-          Projects
-        </h1>
+        <div>
+          <h1 className="text-xs font-bold tracking-[0.3em] uppercase text-white/60">
+            Portfolio
+          </h1>
+          <h2 className="text-2xl font-black text-white leading-tight">
+            PROJECTS
+          </h2>
+        </div>
       </div>
 
-      {/* Scroll */}
-      <div className="absolute inset-0 overflow-y-auto px-2 sm:px-4 md:px-6 pb-6 sm:pb-8 pt-16 sm:pt-20">
-        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-2 sm:gap-3 md:gap-4 sm:grid-cols-2">
-          {PROJECTS.map((project) => (
-            <div
-              key={project.title}
-              className="group relative rounded-lg sm:rounded-xl border border-white/20 bg-white/10 p-3 sm:p-4 md:p-5 backdrop-blur transition-all hover:-translate-y-1 hover:border-blue-400/40"
-            >
-              {/* Header */}
-              <div className="flex items-start justify-between gap-2">
-                <h2 className="text-base sm:text-lg font-medium">
-                  {project.title}
-                </h2>
+      {/* Grid de Projetos */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-1 gap-5 sm:grid-cols-2 pb-10"
+      >
+        {PROJECTS.map((project) => (
+          <motion.div
+            key={project.title}
+            variants={itemVariants}
+            whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            className="group relative overflow-hidden rounded-3xl border border-white/40 bg-white/10 p-6 backdrop-blur-md
+                       transition-all duration-300
+                       cursor-pointer
+                       hover:bg-white/20 hover:border-white/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
+          >
+            {/* Efeito de Reflexo (Glint) no topo do card */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/50 to-transparent" />
 
-                <div className="flex gap-2 opacity-0 transition group-hover:opacity-100 text-sm sm:text-base">
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] font-black tracking-widest text-gray/40 uppercase">
+                  Exp. {project.index}
+                </span>
+
+                <div className="flex gap-3">
                   <a
                     href={project.github}
                     target="_blank"
-                    className="hover:text-blue-400"
+                    rel="noreferrer"
+                    className="p-2 rounded-full bg-black/20 text-white/70 hover:text-white hover:bg-black/40 transition-all"
                   >
-                    <BsGithub />
+                    <BsGithub className="text-lg" />
                   </a>
                   <a
                     href={project.live}
                     target="_blank"
-                    className="hover:text-blue-400"
+                    rel="noreferrer"
+                    className="p-2 rounded-full bg-white/20 text-white/70 hover:text-white hover:bg-white/40 transition-all"
                   >
-                    <BsBoxArrowUpRight />
+                    <BsBoxArrowUpRight className="text-lg" />
                   </a>
                 </div>
               </div>
 
-              {/* Description */}
-              <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-white/70">
+              <h3 className="text-xl font-bold text-white mb-2 drop-shadow-md">
+                {project.title}
+              </h3>
+
+              <p className="text-sm text-white/80 leading-relaxed mb-6 font-medium">
                 {project.description}
               </p>
 
-              {/* Tech */}
-              <div className="mt-2 sm:mt-4 flex flex-wrap gap-1 sm:gap-2">
+              {/* Tech Tags - Estilo 'Pill' Glass */}
+              <div className="flex flex-wrap gap-2">
                 {project.tech.map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-md bg-white/10 px-2 py-0.5 sm:py-1 text-xs text-white/80"
+                    className="rounded-full bg-black/10 border border-white/20 px-3 py-1 text-[10px] font-bold text-white tracking-wide backdrop-blur-sm"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
+
+            {/* Círculo decorativo de fundo no hover */}
+            <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-colors" />
+          </motion.div>
+        ))}
+      </motion.div>
     </div>
   );
 }
